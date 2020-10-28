@@ -21,6 +21,11 @@ public class Screen extends Canvas{
         Dimension size = new Dimension(scale*w, scale*h);
         setPreferredSize(size);
         frame = new JFrame();
+        frame.add(this);
+        frame.pack();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 
     private void draw() {
@@ -47,7 +52,7 @@ public class Screen extends Canvas{
         s.testScreen();
     }
 
-    private void testScreen() {
+    public void testScreen() {
         pixels[100*320+10] = 0xFF0000;
         pixels[100*320+11] = 0xFF0000;
         pixels[101*320+10] = 0xFF0000;
