@@ -8,6 +8,7 @@ import javax.swing.*;
  */
 public class Runner implements Runnable{
     private String title = "Program";
+    private Graph graph;
     private Screen screen;
     private Thread thread;
     private boolean running = false;
@@ -22,6 +23,7 @@ public class Runner implements Runnable{
         this.height = h;
         this.scale = s;
         screen = new Screen(width,height, scale);
+        graph = new Graph(w,h);
     }
 
     public synchronized void start() {
@@ -56,7 +58,7 @@ public class Runner implements Runnable{
             lastTime = now;
 
             while(deltaUpdate >= 1) {
-                screen.update();
+                screen.drawPoint(graph.getnextpoint());
                 updates++;
                 deltaUpdate--;
             }

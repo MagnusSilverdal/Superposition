@@ -49,7 +49,11 @@ public class Screen extends Canvas{
         return frame;
     }
 
+    public void drawPoint(int[] point) {
+        pixels[point[1]*image.getWidth()+point[0]] = 0xFFFFFF;
+    }
     // For testing
+
     public static void main(String[] args) {
         Screen s = new Screen(320,200,2);
         s.frame.add(s);

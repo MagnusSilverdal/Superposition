@@ -7,8 +7,10 @@
 public class Graph {
     private FourierExpansion fe;
     private double theta;
-    private double xRange;
-    private double yRange;
+    private double xMin;
+    private double xMax;
+    private double yMin;
+    private double yMax;
     private int width;
     private int height;
 
@@ -17,16 +19,19 @@ public class Graph {
         this.height = h;
         this.fe = new FourierExpansion(10);
         this.theta = 0;
-        this.xRange = 4*Math.PI;
-        this.yRange = 2;
+        this.xMin = 0;
+        this.xMax = 4*Math.PI;
+        this.yMin = 0.2;
+        this.yMax = 1.5;
     }
 
+    // Need to figure out scaling and range issues... Temporary fix
     public int[] getnextpoint() {
         int[] coord = new int[2];
-        coord[0] = (int)(width*(theta/xRange));
-        coord[1] = height - (int)(height*(fe.getRealValue(theta)/yRange));
-        theta += xRange/width;
-        if (theta >= xRange) {
+        coord[0] = (int)(width*(theta/xMax));
+        coord[1] = (int)(height*(yMin + (0.8*fe.getRealValue(theta)/yMax)));
+        theta += xMax/width;
+        if (theta >= xMax) {
             theta = 0;
         }
         return coord;
