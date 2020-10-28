@@ -7,12 +7,15 @@ import javax.swing.*;
  * @author Magnus Silverdal
  */
 public class Runner implements Runnable{
+    private String title = "Program";
     private Screen screen;
     private Thread thread;
     private boolean running = false;
     private int width;
     private int height;
     private int scale;
+    private int fps = 30;
+    private int ups = 30;
 
     public Runner(int w, int h, int s) {
         this.width = w;
@@ -37,7 +40,39 @@ public class Runner implements Runnable{
     }
     @Override
     public void run() {
+        double fpsInterval = 1000000000.0 / fps;
+        double upsInterval = 1000000000.0 / ups;
+        double deltaRender = 0;
+        double deltaUpdate = 0;
+        int frames = 0;
+        int updates = 0;
+        long lastTime = System.nanoTime();
+        long timer = System.currentTimeMillis();
+
         while (running) {
+            long now = System.nanoTime();
+            deltaRender += (now - lastTime) / fpsInterval;
+            deltaUpdate += (now - lastTime) / upsInterval;
+            lastTime = now;
+
+            while(deltaUpdate >= 1) {
+                screen.update();
+                updates++;
+                deltaUpdate--;
+            }
+
+            while(deltaRender >= 1) {
+                screen.draw();
+                frames++;
+                deltaRender--;
+            }
+
+            if(System.currentTimeMillis() - timer >= 1000) {
+                timer += 1000;
+                screen.getFrame().setTitle(title + "  |  " + updates + " ups, " + frames + " fps");
+                frames = 0;
+                updates = 0;
+            }
         }
         stop();
     }

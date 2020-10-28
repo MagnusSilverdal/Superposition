@@ -28,7 +28,7 @@ public class Screen extends Canvas{
         frame.setVisible(true);
     }
 
-    private void draw() {
+    public void draw() {
         BufferStrategy bs = getBufferStrategy();
         if (bs == null) {
             createBufferStrategy(3);
@@ -39,6 +39,14 @@ public class Screen extends Canvas{
         g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
         g.dispose();
         bs.show();
+    }
+
+    public void update() {
+
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 
     // For testing
@@ -57,9 +65,5 @@ public class Screen extends Canvas{
         pixels[100*320+11] = 0xFF0000;
         pixels[101*320+10] = 0xFF0000;
         pixels[101*320+11] = 0xFF0000;
-        while (true) {
-            draw();
-        }
     }
-
 }
