@@ -56,7 +56,7 @@ public class FourierExpansion {
     }
 
     /**
-     * get expansion value att theta
+     * get expansion value at theta
      * @param theta
      * @return
      */
@@ -69,7 +69,7 @@ public class FourierExpansion {
     public static void main(String[] args) {
         FourierExpansion fe = new FourierExpansion(10);
         for (double theta = 0 ; theta < 2*Math.PI ; theta+=0.1) {
-            System.out.println(theta + " " + fe.getRealValue(theta));
+            System.out.println(theta + ", " + fe.getRealValue(theta));
         }
     }
 }

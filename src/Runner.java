@@ -1,5 +1,3 @@
-import javax.swing.*;
-
 /**
  * This is a class
  * Created 2020-10-28
@@ -8,7 +6,7 @@ import javax.swing.*;
  */
 public class Runner implements Runnable{
     private String title = "Program";
-    private Graph graph;
+    private FourierGraph fourierGraph;
     private Screen screen;
     private Thread thread;
     private boolean running = false;
@@ -23,7 +21,7 @@ public class Runner implements Runnable{
         this.height = h;
         this.scale = s;
         screen = new Screen(width,height, scale);
-        graph = new Graph(w,h);
+        fourierGraph = new FourierGraph(w,h);
     }
 
     public synchronized void start() {
@@ -50,7 +48,7 @@ public class Runner implements Runnable{
         int updates = 0;
         long lastTime = System.nanoTime();
         long timer = System.currentTimeMillis();
-
+        fourierGraph.createAxis(screen.getPixels());
         while (running) {
             long now = System.nanoTime();
             deltaRender += (now - lastTime) / fpsInterval;
@@ -58,7 +56,7 @@ public class Runner implements Runnable{
             lastTime = now;
 
             while(deltaUpdate >= 1) {
-                screen.drawPoint(graph.getnextpoint());
+                fourierGraph.update(screen.getPixels());
                 updates++;
                 deltaUpdate--;
             }
@@ -81,12 +79,7 @@ public class Runner implements Runnable{
 
     // For testing
     public static void main(String[] args) {
-        Runner program = new Runner(320, 200, 2);
-        program.test();
+        Runner program = new Runner(1024, 800, 1);
         program.start();
-    }
-
-    private void test() {
-        screen.testScreen();
     }
 }
