@@ -18,8 +18,8 @@ public class Grid {
         this.height = h;
         this.xMin = 0;
         this.xMax = 2*Math.PI;
-        this.yMin = -0.2;
-        this.yMax = 1.2;
+        this.yMin = -1;
+        this.yMax = 2;
         axis = new int[width*height];
         drawAxis();
     }

@@ -65,6 +65,10 @@ public class FourierExpansion {
         return result;
     }
 
+    public double getComponentRealValue(int k, double theta) {
+        return a[k]*Math.sin(k*theta);
+    }
+
     // For testing
     public static void main(String[] args) {
         FourierExpansion fe = new FourierExpansion(10);

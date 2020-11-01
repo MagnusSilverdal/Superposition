@@ -13,8 +13,8 @@ public class Runner implements Runnable{
     private int width;
     private int height;
     private int scale;
-    private int fps = 30;
-    private int ups = 30;
+    private int fps = 60;
+    private int ups = 60;
 
     public Runner(int w, int h, int s) {
         this.width = w;
