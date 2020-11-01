@@ -7,6 +7,8 @@
 public class FourierGraph {
     private FourierExpansion fe;
     private double theta;
+    private double phi;
+
     private Grid grid;
     private int[][] graphs;
 
@@ -16,16 +18,35 @@ public class FourierGraph {
         this.theta = grid.getxMin();
     }
 
-    // Need to figure out scaling and range issues... Temporary fix
-    public int[] getnextpoint() {
-        int[] coord = new int[2];
-        coord[0] = grid.convertX(theta);
-        coord[1] = grid.convertY(fe.getRealValue(theta));
+    public int[] getNextPoint() {
+        int[] coord = getNextPoint(theta,0);
         theta += grid.getXRange()/grid.getWidth();
         if (theta >= grid.getxMax()) {
             theta = grid.getxMin();
         }
         return coord;
+    }
+
+    public int[] getNextPoint(double theta, double phi) {
+        int[] coord = new int[2];
+        coord[0] = grid.convertX(theta);
+        coord[1] = grid.convertY(fe.getRealValue(theta + phi));
+        return coord;
+    }
+
+    public int[][] getCurve() {
+        int points[][] = new int[grid.getWidth()][2];
+        double theta = grid.getxMin();
+        double delta = grid.getXRange()/grid.getWidth();
+        for (int i = 0 ; i < grid.getWidth() ; i++) {
+            points[i] = getNextPoint(theta,phi);
+            theta += delta;
+        }
+        phi += delta;
+        if (phi >= grid.getxMax()) {
+            phi = grid.getxMin();
+        }
+        return points;
     }
 
     /*public int[] getComponent(int k) {
@@ -39,14 +60,22 @@ public class FourierGraph {
     public static void main(String[] args) {
         FourierGraph g = new FourierGraph(320,200);
         for (int i = 0 ; i < 320 ; i++) {
-            int[] coord = g.getnextpoint();
+            int[] coord = g.getNextPoint();
             System.out.println(coord[0] + "," + coord[1]);
         }
     }
 
     public void update(int[] pixels) {
-        int[] point = getnextpoint();
-        pixels[point[1]*grid.getWidth()+point[0]] = 0xFFFFFF;
+        //int[] point = getNextPoint();
+        //pixels[point[1]*grid.getWidth()+point[0]] = 0xFFFFFF;
+        for (int i = 0 ; i < pixels.length ; i++) {
+            pixels[i] = 0;
+        }
+        createAxis(pixels);
+        int[][] curve = getCurve();
+        for (int i = 0 ; i <  grid.getWidth() ; i++) {
+            pixels[curve[i][1]*grid.getWidth()+curve[i][0]] = 0xFFFFFF;
+        }
     }
 
     public void createAxis(int[] pixels) {
