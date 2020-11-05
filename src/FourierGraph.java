@@ -10,14 +10,25 @@ public class FourierGraph {
     private double phi;
 
     private Grid grid;
+    private State state;
     private ScreenTools tools;
     private int[][] graphs;
 
     public FourierGraph(int w, int h) {
-        this.fe = new FourierExpansion(20);
-        grid = new Grid(w,h);
+        this.grid = new Grid(w,h);
+        this.state = new State();
+        this.fe = new FourierExpansion(state.getCurves()+1);
         this.theta = grid.getxMin();
         this.tools = new ScreenTools(grid);
+    }
+
+    public void changeExpansion() {
+        this.fe = new FourierExpansion(state.getCurves());
+    }
+
+    public void changeExpansion(int numCurves) {
+        state.setCurves(numCurves);
+        this.fe = new FourierExpansion(state.getCurves());
     }
 
     public int[] getNextPoint() {
@@ -51,6 +62,9 @@ public class FourierGraph {
         return points;
     }
 
+    public State getState() {
+        return state;
+    }
 
     public int[] getNextComponentPoint(int k) {
         int[] coord = getNextComponentPoint(k,theta,0);
@@ -97,22 +111,39 @@ public class FourierGraph {
         }
         createAxis(pixels);
         int[][] curve = getCurve();
-        int[][] part1 = getComponent(1);
-        int[][] part2 = getComponent(3);
-        int[][] part3 = getComponent(4);
-        int[][] part4 = getComponent(7);
-        int[][] part5 = getComponent(9);
-        int[][] part6 = getComponent(11);
-        for (int i = 0 ; i <  grid.getWidth()-1 ; i++) {
-            tools.drawLine(pixels, curve[i], curve[i+1],0xFFFFFF);
-            tools.drawLine(pixels, part1[i], part1[i+1],0xFF0000);
-            tools.drawLine(pixels, part2[i], part2[i+1],0x00FF00);
-            tools.drawLine(pixels, part3[i], part3[i+1],0x0000FF);
-            tools.drawLine(pixels, part4[i], part4[i+1],0xFFFF00);
-            tools.drawLine(pixels, part5[i], part5[i+1],0x00FFFF);
-            tools.drawLine(pixels, part6[i], part6[i+1],0xFF00FF);
-            //pixels[curve[i][1]*grid.getWidth()+curve[i][0]] = 0xFFFFFF;
+
+        for (int i = 0; i < grid.getWidth() - 1; i++) {
+            if (state.drawContinous()) {
+                tools.drawLine(pixels, curve[i], curve[i + 1], 0xFFFFFF);
+            } else {
+                pixels[curve[i][1]*grid.getWidth()+curve[i][0]] = 0xFFFFFF;
+            }
         }
+
+        if (!state.drawOnlyGraph()) {
+            int[][][] part = new int[state.getCurves()][][];
+            for (int i = 0 ; i < state.getCurves() ; i++) {
+                part[i] = getComponent(i);
+            }
+            for (int i = 0 ; i < grid.getWidth() - 1 ; i++) {
+                if (state.drawContinous()) {
+                    for (int j = 0 ; j < state.getCurves() ; j++) {
+                        tools.drawLine(pixels, part[j][i], part[j][i + 1], 0xFFFFFF);
+                    }
+                } else {
+                    for (int j = 0 ; j < state.getCurves() ; j++) {
+                        pixels[part[j][i][1] * grid.getWidth() + part[j][i][0]] = 0xFFFFFF;
+                    }
+                }
+            }
+        }
+/*        tools.drawLine(pixels, part1[i], part1[i+1],0xFF0000);
+        tools.drawLine(pixels, part2[i], part2[i+1],0x00FF00);
+        tools.drawLine(pixels, part3[i], part3[i+1],0x0000FF);
+        tools.drawLine(pixels, part4[i], part4[i+1],0xFFFF00);
+        tools.drawLine(pixels, part5[i], part5[i+1],0x00FFFF);
+        tools.drawLine(pixels, part6[i], part6[i+1],0xFF00FF);
+*/
     }
 
     public void createAxis(int[] pixels) {

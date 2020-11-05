@@ -1,10 +1,13 @@
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 /**
  * This is a class
  * Created 2020-10-28
  *
  * @author Magnus Silverdal
  */
-public class Runner implements Runnable{
+public class Runner implements Runnable {
     private String title = "Program";
     private FourierGraph fourierGraph;
     private Screen screen;
@@ -22,6 +25,7 @@ public class Runner implements Runnable{
         this.scale = s;
         screen = new Screen(width,height, scale);
         fourierGraph = new FourierGraph(w,h);
+        screen.getFrame().addKeyListener(new FourierKeyListener(fourierGraph));
     }
 
     public synchronized void start() {
@@ -79,7 +83,7 @@ public class Runner implements Runnable{
 
     // For testing
     public static void main(String[] args) {
-        Runner program = new Runner(1024, 800, 1);
+        Runner program = new Runner(1280, 800, 1);
         program.start();
     }
 }
