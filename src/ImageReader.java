@@ -52,7 +52,25 @@ public class ImageReader {
 
     public static void main(String[] args) {
         ImageReader ir = new ImageReader("curve.png");
+        System.out.println("Curve");
         System.out.println(ir.toString());
+        int[] data = ir.getCurve();
+        // Transform need real and complex part even if ours i purely real
+        int[] complexData = new int[data.length];
+        System.out.println("transform:");
+        double[][] transform = DFT.transform(data,complexData);
+        for (int i = 0 ; i < data.length ; i++) {
+            System.out.println(transform[0][i] + ", " + transform[1][i]);
+        }
+        System.out.println("recreated curve");
+        for (int x = 0 ; x < 1024 ; x++) {
+            double y = 0;
+            for (int i = 0 ; i < 1024 ; i++) {
+                y +=  transform[0][i] * Math.cos(2*Math.PI*i*x/1024) + transform[1][i] * Math.sin(2*Math.PI*i*x/1024);
+            }
+            System.out.println(x + ", " + y);
+        }
+
     }
 
 }

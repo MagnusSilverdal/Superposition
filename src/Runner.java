@@ -83,7 +83,7 @@ public class Runner implements Runnable {
 
     // For testing
     public static void main(String[] args) {
-        Runner program = new Runner(1280, 800, 1);
+        Runner program = new Runner(1200, 800, 1);
         program.start();
     }
 }
