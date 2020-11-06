@@ -18,7 +18,7 @@ public class FourierExpansion {
      */
 
     public FourierExpansion(int n) {
-        a = new double[n];
+        a = new double[n+1];
         a[0] = 0.5;
         double twoByPi = 2/Math.PI;
         for (int i = 1 ; i < n ; i++) {

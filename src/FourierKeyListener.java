@@ -1,5 +1,3 @@
-import netscape.security.UserTarget;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -19,11 +17,16 @@ public class FourierKeyListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         if (keyEvent.getKeyCode() == KeyEvent.VK_C) {
-            fourierGraph.getState().setContinous();
+            fourierGraph.getState().setContinuous();
         } else if (keyEvent.getKeyCode() == KeyEvent.VK_U) {
             fourierGraph.getState().setDescrete();
+        } else if (keyEvent.getKeyCode() == KeyEvent.VK_O) {
+            fourierGraph.getState().setOnlyGraph();
+        } else if (keyEvent.getKeyCode() == KeyEvent.VK_M) {
+            fourierGraph.getState().setAllCurves();
         } else if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT) {
-            fourierGraph.changeExpansion(fourierGraph.getState().getCurves()-1);
+            if (fourierGraph.getState().getCurves()>0)
+                fourierGraph.changeExpansion(fourierGraph.getState().getCurves()-1);
         } else if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT) {
             fourierGraph.changeExpansion(fourierGraph.getState().getCurves()+1);
         } else if (keyEvent.getKeyCode() == KeyEvent.VK_1) {

@@ -13,6 +13,8 @@ public class FourierGraph {
     private State state;
     private ScreenTools tools;
     private int[][] graphs;
+    private int[] colors = {0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0x00FFFF, 0xFF00FF,0x880000, 0x008800, 0x000088,
+            0x888800, 0x008888, 0x880088};
 
     public FourierGraph(int w, int h) {
         this.grid = new Grid(w,h);
@@ -111,6 +113,9 @@ public class FourierGraph {
 
         if (!state.drawOnlyGraph()) {
             int numCurves = state.getCurves();
+            if (numCurves > colors.length*2) {
+                numCurves = colors.length*2;
+            }
             int[][][] part = new int[numCurves][][];
             for (int i = 0 ; i < numCurves ; i++) {
                 part[i] = getComponent(i);
@@ -118,11 +123,11 @@ public class FourierGraph {
             for (int i = 0 ; i < grid.getWidth() - 1 ; i++) {
                 if (state.drawContinous()) {
                     for (int j = 0 ; j < numCurves ; j++) {
-                        tools.drawLine(pixels, part[j][i], part[j][i + 1], 0xFFFFFF);
+                        tools.drawLine(pixels, part[j][i], part[j][i + 1], colors[j/2]);
                     }
                 } else {
                     for (int j = 0 ; j < numCurves ; j++) {
-                        pixels[part[j][i][1] * grid.getWidth() + part[j][i][0]] = 0xFFFFFF;
+                        pixels[part[j][i][1] * grid.getWidth() + part[j][i][0]] = colors[j/2];
                     }
                 }
             }
